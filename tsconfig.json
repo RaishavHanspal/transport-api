@@ -1,0 +1,8 @@
+{
+    "compilerOptions": {
+        "sourceMap": true,
+        "outDir": "./build"
+    },
+    "include": ["./source/**/*"],
+    "exclude": ["node_modules"]
+}
