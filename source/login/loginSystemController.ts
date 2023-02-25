@@ -11,16 +11,16 @@ export class loginSystemController {
     public login(req: Request, res: Response): void {
         this.loginModel && this.loginModel.findOne({ username: req.body.username }).then((user: any): void => {
             if (!user) {
-                res.send({ ...serverMessageConstants.UNREGISTERED_USER, success: false } as IResponseBody);
+                res.send(serverMessageConstants.UNREGISTERED_USER as IResponseBody);
             }
             else if (user.password === req.body.password) {
-                res.send({ ...serverMessageConstants.LOGIN_SUCCESS, success: true } as IResponseBody);
+                res.send(serverMessageConstants.LOGIN_SUCCESS as IResponseBody);
             }
             else {
-                res.send({ ...serverMessageConstants.INCORRECT_PASS, success: false } as IResponseBody);
+                res.send(serverMessageConstants.INCORRECT_PASS as IResponseBody);
             }
         }).catch((err) => {
-            res.send({ ...serverMessageConstants.DB_MODEL_CONNECTIVITY_ISSUE, success: false, err } as IResponseBody);
+            res.send({ ...serverMessageConstants.DB_MODEL_CONNECTIVITY_ISSUE, err } as IResponseBody);
         });
     }
 
@@ -29,16 +29,16 @@ export class loginSystemController {
         this.loginModel && this.loginModel.findOne({ username: req.body.username }).then((user: any): void => {
             if (!user) {
                 this.loginModel.insertMany([{ username: req.body.username, password: req.body.password }]).then(() => {
-                    res.send({ ...serverMessageConstants.SIGNUP_SUCCESS, success: true } as IResponseBody);
+                    res.send(serverMessageConstants.SIGNUP_SUCCESS as IResponseBody);
                 }).catch((err) => {
-                    res.send({ ...serverMessageConstants.DB_MODEL_CONNECTIVITY_ISSUE, success: false, err } as IResponseBody);
+                    res.send({ ...serverMessageConstants.DB_MODEL_CONNECTIVITY_ISSUE, err } as IResponseBody);
                 })
             }
             else {
-                res.send({ ...serverMessageConstants.USER_REGISTERED, success: false } as IResponseBody);
+                res.send(serverMessageConstants.USER_REGISTERED as IResponseBody);
             }
         }).catch((err) => {
-            res.send({ ...serverMessageConstants.DB_MODEL_CONNECTIVITY_ISSUE, success: false, err } as IResponseBody);
+            res.send({ ...serverMessageConstants.DB_MODEL_CONNECTIVITY_ISSUE, err } as IResponseBody);
         });
     }
 }

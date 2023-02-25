@@ -15,12 +15,14 @@ export class transportController {
         this.transportModel && this.transportModel.findOne({ bookedOn: req.body.bookedOn }).then((user: any): void => {
             if (!user) {
                 this.transportModel.insertMany([req.body]);
-                res.send({ ...serverMessageConstants.BOOKING_SUCCESS, success: true } as IResponseBody);
+                res.send(serverMessageConstants.BOOKING_SUCCESS as IResponseBody);
             }
             else {
-                res.send({ ...serverMessageConstants.DUPLICATE_BOOKING, success: false } as IResponseBody);
+                res.send(serverMessageConstants.DUPLICATE_BOOKING as IResponseBody);
             }
-        })
+        }).catch((err) => {
+            res.send({ ...serverMessageConstants.DB_MODEL_CONNECTIVITY_ISSUE, err } as IResponseBody);
+        });
     }
 
     /** delete the booking from the records - cancel ticket/booking */
@@ -28,34 +30,34 @@ export class transportController {
         this.transportModel && this.transportModel.findOne({ username: req.body.username, bookedOn: req.body.bookedOn }).then((user: any): void => {
             if (user) {
                 this.transportModel.deleteOne({ bookedOn: req.body.bookedOn }).then(() => {
-                    res.send({ ...serverMessageConstants.CANCEL_BOOKING, success: true } as IResponseBody);
-                }).catch(() => {
-                    res.send({ ...serverMessageConstants.DB_MODEL_CONNECTIVITY_ISSUE, success: false } as IResponseBody);
+                    res.send(serverMessageConstants.CANCEL_BOOKING as IResponseBody);
+                }).catch((err) => {
+                    res.send({ ...serverMessageConstants.DB_MODEL_CONNECTIVITY_ISSUE, err } as IResponseBody);
                 })
             }
             else {
-                res.send({ ...serverMessageConstants.NO_BOOKING_RECORD, success: true } as IResponseBody);
+                res.send(serverMessageConstants.NO_BOOKING_RECORD as IResponseBody);
             }
         }).catch((err) => {
-            res.send({ ...serverMessageConstants.DB_MODEL_CONNECTIVITY_ISSUE, success: false } as IResponseBody);
+            res.send({ ...serverMessageConstants.DB_MODEL_CONNECTIVITY_ISSUE, err } as IResponseBody);
         });
     }
 
     /** get all the bookings from the records */
     public getBookings(req: Request, res: Response): void {
         this.transportModel && this.transportModel.find({ username: req.body.username }).then((booking: any): void => {
-            if (booking && booking.length) {
+            if (booking) {
                 this.transportModel.find({ username: req.body.username }).then((bookings: Array<any>) => {
-                    res.send({ ...serverMessageConstants.BOOKINGS_FOUND, entries: bookings, success: true, msg: serverMessageConstants.BOOKINGS_FOUND.msg.replace("%0", String(bookings.length)) } as IResponseBody);
-                }).catch(() => {
-                    res.send({ ...serverMessageConstants.DB_MODEL_CONNECTIVITY_ISSUE, success: false } as IResponseBody);
+                    res.send({
+                        ...serverMessageConstants.BOOKINGS_FOUND, entries: bookings,
+                        msg: serverMessageConstants.BOOKINGS_FOUND.msg.replace("%0", String(bookings.length))
+                    } as IResponseBody);
+                }).catch((err) => {
+                    res.send({ ...serverMessageConstants.DB_MODEL_CONNECTIVITY_ISSUE, err } as IResponseBody);
                 })
             }
-            else {
-                res.send({ ...serverMessageConstants.NO_BOOKING_RECORD, success: true, entries: [] } as IResponseBody);
-            }
         }).catch((err) => {
-            res.send({ ...serverMessageConstants.DB_MODEL_CONNECTIVITY_ISSUE, success: false } as IResponseBody);
+            res.send({ ...serverMessageConstants.DB_MODEL_CONNECTIVITY_ISSUE, err } as IResponseBody);
         });
     }
 
