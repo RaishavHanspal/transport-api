@@ -1,4 +1,3 @@
-import { Request, Response } from "express";
 import mongoose from "mongoose";
 import config from "../configurables/config";
 import { loginSystemController } from "./loginSystemController";
