@@ -14,7 +14,7 @@ export class loginSystemController {
                 res.send(serverMessageConstants.UNREGISTERED_USER as IResponseBody);
             }
             else if (user.password === req.body.password) {
-                res.send(serverMessageConstants.LOGIN_SUCCESS as IResponseBody);
+                res.send({...serverMessageConstants.LOGIN_SUCCESS, username: req.body.username} as IResponseBody);
             }
             else {
                 res.send(serverMessageConstants.INCORRECT_PASS as IResponseBody);
