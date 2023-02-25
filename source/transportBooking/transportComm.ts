@@ -16,7 +16,7 @@ export default async(expressApp) => {
     const transportModel: any = await mongoose.model(config.mongo.collections.transportCollection, transportBookingSchema);
     const bookingController = new transportController(transportModel);
 
-    expressApp.post("/book", bookingController.newBooking.bind(bookingController));
-    expressApp.post("/cancel", bookingController.cancelBooking.bind(bookingController));
-    expressApp.post("/getbookings", bookingController.getBookings.bind(bookingController));
+    expressApp.post(config.endpoints.book, bookingController.newBooking.bind(bookingController));
+    expressApp.post(config.endpoints.cancel, bookingController.cancelBooking.bind(bookingController));
+    expressApp.post(config.endpoints.getbookings, bookingController.getBookings.bind(bookingController));
 }

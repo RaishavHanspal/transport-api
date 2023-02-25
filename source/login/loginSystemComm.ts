@@ -10,7 +10,6 @@ export default async(expressApp) => {
     const loginModel = await mongoose.model(config.mongo.collections.loginCollection, loginSchema);
     const loginController = new loginSystemController(loginModel);
 
-    expressApp.post("/signup", loginController.signup.bind(loginController));
-
-    expressApp.post("/login", loginController.login.bind(loginController));
+    expressApp.post(config.endpoints.signup, loginController.signup.bind(loginController));
+    expressApp.post(config.endpoints.login, loginController.login.bind(loginController));
 }

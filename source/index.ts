@@ -1,10 +1,11 @@
 import express, { Express } from "express";
+import config from "./configurables/config";
 import { load } from "./loader";
 
 /** start the port connection - entry point for express */
 async function startServer(params?: any): Promise<any> {
     const app: Express = express();
-    const port: string = process.env.PORT || "3000";
+    const port: number = config.port;
     await load({ expressApp: app });
     return app.listen(port, (): void => {
         console.log("port listening ::", port);

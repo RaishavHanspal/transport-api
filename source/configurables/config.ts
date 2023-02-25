@@ -10,5 +10,12 @@ export default {
             transportCollection: "transportcollection",
             userDetailsCollection: "userDetailsCollection"
         }
+    },
+    endpoints: {
+        login: "/login",
+        signup: "/signup",
+        book: "/book",
+        cancel: "/cancel",
+        getbookings: "/getbookings"
     }
 }
