@@ -18,4 +18,5 @@ export default async(expressApp) => {
 
     expressApp.post("/book", bookingController.newBooking.bind(bookingController));
     expressApp.post("/cancel", bookingController.cancelBooking.bind(bookingController));
+    expressApp.post("/getbookings", bookingController.getBookings.bind(bookingController));
 }

@@ -38,4 +38,23 @@ export class transportController{
             res.send("Please try again!");
         });
     }
+
+     /** get all the bookings from the records */
+     public getBookings(req: Request, res: Response): void{
+        this.transportModel && this.transportModel.findOne({ username: req.body.username }).then((user: any): void => {
+            if(user){
+                this.transportModel.find({ username: req.body.username }).then((bookings: Array<any>) => {
+                    res.send(JSON.stringify(bookings));
+                }).catch(() => {
+                    res.send("Issue while fetching from database");
+                })
+            }
+            else{
+                res.send("No bookings found");
+            }
+        }).catch((err) => {
+            res.send("Please try again!");
+        });
+    }
+
 }
