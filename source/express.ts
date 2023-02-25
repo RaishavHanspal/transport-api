@@ -1,9 +1,13 @@
-import express from "express";
+import { Router } from "express";
 import loginSystem from "./login/loginSystemComm";
 import transport from "./transportBooking/transportComm";
-export default async ({expressApp}) => {
-    expressApp.use(express.json());
-    expressApp.use(express.urlencoded({ extended: false }));
+import bodyParser from "body-parser";
+import cors from "cors";
+export default async ({ expressApp }) => {
+    expressApp.use(cors({}));
+    expressApp.use(bodyParser.json());
+    expressApp.use(bodyParser.urlencoded({ extended: false }));
+    expressApp.use(Router());
     await loginSystem(expressApp);
     await transport(expressApp);
 }

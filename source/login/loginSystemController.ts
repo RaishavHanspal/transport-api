@@ -1,16 +1,12 @@
 import mongoose from "mongoose";
 import { Request, Response } from "express";
-import httpResponseHeaders from "../httpResponseHeaders";
 export class loginSystemController {
     constructor(private loginModel: mongoose.Model<any, unknown, unknown, unknown, any>) {
-        this.loginModel = loginModel;
-        console.log(this, loginModel)
         console.log("loginSystemController:: Instance created!");
     }
 
     /** on user login validates if entry is available in database and return respective info */
     public login(req: Request, res: Response): void {
-        httpResponseHeaders(res);
         this.loginModel && this.loginModel.findOne({ username: req.body.username }).then((user: any): void => {
             if (!user) {
                 res.send({ msg: "User not registered! Signup if you are a new user.", success: false });
@@ -26,7 +22,6 @@ export class loginSystemController {
 
     /** signup - only allows single insertion of user details, will not allow duplicate username in database */
     public signup(req: Request, res: Response): void {
-        httpResponseHeaders(res);
         this.loginModel && this.loginModel.findOne({ username: req.body.username }).then((user: any): void => {
             if (!user) {
                 this.loginModel.insertMany([{ username: req.body.username, password: req.body.password }]).then(() => {
