@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import config from "../configurables/config";
 import { loginSystemController } from "./loginSystemController";
-export default async(expressApp, transportDb) => {
+export default async(expressApp) => {
     /** a basic structure schema for login details object to be added in the database */
     const loginSchema: any = new mongoose.Schema({
         username: { type: String, required: true },
@@ -10,7 +10,7 @@ export default async(expressApp, transportDb) => {
     const loginModel = await mongoose.model(config.mongo.collections.loginCollection, loginSchema);
     const loginController = new loginSystemController(loginModel);
 
-    expressApp.post("/signup", loginController.signup);
+    expressApp.post("/signup", loginController.signup.bind(loginController));
 
-    expressApp.post("/login", loginController.login);
+    expressApp.post("/login", loginController.login.bind(loginController));
 }

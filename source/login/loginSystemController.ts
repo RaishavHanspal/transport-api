@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
 import { Request, Response } from "express";
-
 export class loginSystemController{
-    constructor(protected loginModel: mongoose.Model<any, unknown, unknown, unknown, any>){
+    constructor(private loginModel: mongoose.Model<any, unknown, unknown, unknown, any>){
+        this.loginModel = loginModel;
+        console.log(this, loginModel)
         console.log("loginSystemController:: Instance created!");
     }
 
@@ -28,14 +29,14 @@ export class loginSystemController{
                 this.loginModel.insertMany([{ username: req.body.username, password: req.body.password }]).then(() => {
                     res.send("Signup successful, Login to continue");
                 }).catch(() => {
-                    res.send("Issue while updatinng database");
+                    res.send("Issue while updating database");
                 })
             }
             else{
                 res.send("User already registered! ");
             }
         }).catch((err) => {
-            console.log("signup failed!")
+            res.send("Please try again!");
         });
     }
 }

@@ -6,7 +6,9 @@ export default {
             name: "abctransportdb"
         },
         collections: {
-            loginCollection: "logincollection"
+            loginCollection: "logincollection",
+            transportCollection: "transportcollection",
+            userDetailsCollection: "userDetailsCollection"
         }
     }
 }
