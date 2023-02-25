@@ -1,7 +1,8 @@
 {
     "compilerOptions": {
         "sourceMap": true,
-        "outDir": "./build"
+        "outDir": "./build",
+        "esModuleInterop": true
     },
     "include": ["./source/**/*"],
     "exclude": ["node_modules"]
