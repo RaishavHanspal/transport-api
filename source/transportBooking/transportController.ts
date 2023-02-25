@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 import { Request, Response } from "express";
+import { serverMessageConstants } from "../configurables/constantMessages";
+import { IResponseBody } from "../interface";
 
 export class transportController {
     constructor(private transportModel: mongoose.Model<any, unknown, unknown, unknown, any>) {
@@ -13,10 +15,10 @@ export class transportController {
         this.transportModel && this.transportModel.findOne({ bookedOn: req.body.bookedOn }).then((user: any): void => {
             if (!user) {
                 this.transportModel.insertMany([req.body]);
-                res.send({ msg: "Booking Successful!", success: true });
+                res.send({ ...serverMessageConstants.BOOKING_SUCCESS, success: true } as IResponseBody);
             }
             else {
-                res.send({ msg: "duplicate insertion - something is not right!", success: false });
+                res.send({ ...serverMessageConstants.DUPLICATE_BOOKING, success: false } as IResponseBody);
             }
         })
     }
@@ -26,34 +28,34 @@ export class transportController {
         this.transportModel && this.transportModel.findOne({ username: req.body.username, bookedOn: req.body.bookedOn }).then((user: any): void => {
             if (user) {
                 this.transportModel.deleteOne({ bookedOn: req.body.bookedOn }).then(() => {
-                    res.send({ msg: "booking cancelled!", success: true });
+                    res.send({ ...serverMessageConstants.CANCEL_BOOKING, success: true } as IResponseBody);
                 }).catch(() => {
-                    res.send({ msg: "Issue while updating database", success: false });
+                    res.send({ ...serverMessageConstants.DB_MODEL_CONNECTIVITY_ISSUE, success: false } as IResponseBody);
                 })
             }
             else {
-                res.send({ msg: "No bookings found", success: true });
+                res.send({ ...serverMessageConstants.NO_BOOKING_RECORD, success: true } as IResponseBody);
             }
         }).catch((err) => {
-            res.send({ msg: "Please try again!", success: false });
+            res.send({ ...serverMessageConstants.DB_MODEL_CONNECTIVITY_ISSUE, success: false } as IResponseBody);
         });
     }
 
     /** get all the bookings from the records */
     public getBookings(req: Request, res: Response): void {
-        this.transportModel && this.transportModel.findOne({ username: req.body.username }).then((user: any): void => {
-            if (user) {
+        this.transportModel && this.transportModel.find({ username: req.body.username }).then((booking: any): void => {
+            if (booking && booking.length) {
                 this.transportModel.find({ username: req.body.username }).then((bookings: Array<any>) => {
-                    res.send(JSON.stringify(bookings));
+                    res.send({ ...serverMessageConstants.BOOKINGS_FOUND, entries: bookings, success: true, msg: serverMessageConstants.BOOKINGS_FOUND.msg.replace("%0", String(bookings.length)) } as IResponseBody);
                 }).catch(() => {
-                    res.send({ msg: "Issue while fetching from database", success: false });
+                    res.send({ ...serverMessageConstants.DB_MODEL_CONNECTIVITY_ISSUE, success: false } as IResponseBody);
                 })
             }
             else {
-                res.send({ msg: "No bookings found", success: true });
+                res.send({ ...serverMessageConstants.NO_BOOKING_RECORD, success: true, entries: [] } as IResponseBody);
             }
         }).catch((err) => {
-            res.send({ msg: "Please try again!", success: false });
+            res.send({ ...serverMessageConstants.DB_MODEL_CONNECTIVITY_ISSUE, success: false } as IResponseBody);
         });
     }
 
