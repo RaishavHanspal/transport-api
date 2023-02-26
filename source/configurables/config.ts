@@ -16,6 +16,8 @@ export default {
         signup: "/signup",
         book: "/book",
         cancel: "/cancel",
-        getbookings: "/getbookings"
+        getbookings: "/getbookings",
+        getUser: "/getUserDetails",
+        setUser: "/setUserDetails"
     }
 }

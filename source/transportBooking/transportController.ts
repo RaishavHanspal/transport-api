@@ -14,8 +14,11 @@ export class transportController {
     public newBooking(req: Request, res: Response): void {
         this.transportModel && this.transportModel.findOne({ bookedOn: req.body.bookedOn }).then((user: any): void => {
             if (!user) {
-                this.transportModel.insertMany([req.body]);
-                res.send(serverMessageConstants.BOOKING_SUCCESS as IResponseBody);
+                this.transportModel.insertMany([req.body]).then((ack) => {
+                    res.send(serverMessageConstants.BOOKING_SUCCESS as IResponseBody);
+                }).catch((err) => {
+                    res.send({ ...serverMessageConstants.DB_MODEL_CONNECTIVITY_ISSUE, err } as IResponseBody);
+                });
             }
             else {
                 res.send(serverMessageConstants.DUPLICATE_BOOKING as IResponseBody);
@@ -28,16 +31,11 @@ export class transportController {
     /** delete the booking from the records - cancel ticket/booking */
     public cancelBooking(req: Request, res: Response): void {
         this.transportModel && this.transportModel.findOne({ username: req.body.username, bookedOn: req.body.bookedOn }).then((user: any): void => {
-            if (user) {
-                this.transportModel.deleteOne({ bookedOn: req.body.bookedOn }).then(() => {
-                    res.send(serverMessageConstants.CANCEL_BOOKING as IResponseBody);
-                }).catch((err) => {
-                    res.send({ ...serverMessageConstants.DB_MODEL_CONNECTIVITY_ISSUE, err } as IResponseBody);
-                })
-            }
-            else {
-                res.send(serverMessageConstants.NO_BOOKING_RECORD as IResponseBody);
-            }
+            this.transportModel.deleteOne({ bookedOn: req.body.bookedOn }).then(() => {
+                res.send(serverMessageConstants.CANCEL_BOOKING as IResponseBody);
+            }).catch((err) => {
+                res.send({ ...serverMessageConstants.DB_MODEL_CONNECTIVITY_ISSUE, err } as IResponseBody);
+            })
         }).catch((err) => {
             res.send({ ...serverMessageConstants.DB_MODEL_CONNECTIVITY_ISSUE, err } as IResponseBody);
         });

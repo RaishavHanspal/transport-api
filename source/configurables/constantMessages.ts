@@ -1,4 +1,4 @@
-export const serverMessageConstants: { [key: string]: { msg: string; code: number, success?: boolean } } = {
+export const serverMessageConstants = {
     DB_MODEL_CONNECTIVITY_ISSUE: {
         msg: "Issue while updating database",
         code: 0
@@ -42,6 +42,20 @@ export const serverMessageConstants: { [key: string]: { msg: string; code: numbe
     BOOKINGS_FOUND:{
         msg: "%0 bookings found!",
         code: 10,
+        success: true
+    },
+    NO_USER_DETAILS: {
+        msg: "no user details found. Please update the details!",
+        code: 11,
+    },
+    USER_DETAILS: {
+        msg: "user details found!",
+        code: 12,
+        success: true
+    },
+    USER_DETAILS_UPDATED: {
+        msg: "user details successfully saved!",
+        code: 13,
         success: true
     }
 }

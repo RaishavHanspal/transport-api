@@ -3,6 +3,7 @@ import loginSystem from "./login/loginSystemComm";
 import transport from "./transportBooking/transportComm";
 import bodyParser from "body-parser";
 import cors from "cors";
+import userDetails from "./user/userComm";
 export default async ({ expressApp }) => {
     expressApp.use(cors({}));
     expressApp.use(bodyParser.json());
@@ -10,4 +11,5 @@ export default async ({ expressApp }) => {
     expressApp.use(Router());
     await loginSystem(expressApp);
     await transport(expressApp);
+    await userDetails(expressApp);
 }

@@ -3,5 +3,5 @@ export interface IResponseBody {
     msg: string;
     code: number;
     err?: any;
-    entries?: Array<any>
+    entries?: any
 }
